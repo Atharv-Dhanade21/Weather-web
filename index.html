@@ -45,56 +45,54 @@
     const apikey = "368e084697f4f0f911b6ad78cb9c389f";
 
     async function checkweather() {
-        
-        
         const city = document.querySelector('.search input').value;
         const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}&units=metric`;
         const response = await fetch(apiUrl);
         const weatherIcon = document.querySelector(".weather-icon");
 
-        if(response.status == 404)
-        {
-            document.querySelector(".error").style.display="block";
-        }   
-        var data = await response.json();
+        if (response.status === 404) {
+            document.querySelector(".error").style.display = "block";
+            document.querySelector(".weather").style.display = "none";
+            return;
+        } else {
+            document.querySelector(".error").style.display = "none";
+        }
+
+        const data = await response.json();
         console.log(data);
 
         document.querySelector(".city").innerHTML = data.name;
-        document.querySelector(".temp").innerHTML =parseInt(data.main.temp) + "°C";
+        document.querySelector(".temp").innerHTML = parseInt(data.main.temp) + "°C";
         document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
         document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h";
-        
+
         const weathermain = data.weather[0].main;
 
-        if(weathermain == "Clouds") 
-        {
+        if (weathermain === "Clouds") {
             weatherIcon.src = "./images/clouds.png";
-        } 
-        else if (weathermain == "Clear") 
-        {
+        } else if (weathermain === "Clear") {
             weatherIcon.src = "./images/clear.png";
-        } 
-        else if (weathermain == "Rain") 
-        {
+        } else if (weathermain === "Rain") {
             weatherIcon.src = "./images/rain.png";
-        } 
-        else if (weathermain == "Drizzle") 
-        {  // Corrected from "Drizz" to "Drizzle"
-            weatherIcon.src = "./images/drizzle.png";   
-        } 
-        else if (weathermain == "Mist") 
-        {
+        } else if (weathermain === "Drizzle") {
+            weatherIcon.src = "./images/drizzle.png";
+        } else if (weathermain === "Mist") {
             weatherIcon.src = "./images/mist.png";
-        } 
-        //else 
-        // {
-        // weatherIcon.src = "./images/default.png";   // Add a default icon if needed
-        //}
- 
-        document.querySelector(".weather").style.display="block";
+        } else {
+            weatherIcon.src = "./images/default.png"; // Default icon
+        }
+
+        document.querySelector(".weather").style.display = "block";
     }
 
+    // Add the event listener for the Enter key
+    document.querySelector('.search input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkweather();
+        }
+    });
 </script>
+
 
 </body>
 </html>
